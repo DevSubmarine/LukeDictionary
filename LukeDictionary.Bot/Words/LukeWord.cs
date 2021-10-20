@@ -29,7 +29,7 @@ namespace DevSubmarine.LukeDictionary
                 throw new ArgumentNullException(nameof(word));
 
             // store as lowercase - case does not matter, while storing as lowercase reduces the need for complex indexing
-            this.Word = word.ToLowerInvariant();
+            this.Word = word.Trim().ToLowerInvariant();
             this.AddedByUserID = addedByUserID;
             this.CreationTimeUTC = creationTimeUTC;
         }
