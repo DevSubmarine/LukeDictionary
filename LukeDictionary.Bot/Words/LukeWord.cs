@@ -34,6 +34,9 @@ namespace DevSubmarine.LukeDictionary
             this.CreationTimeUTC = creationTimeUTC;
         }
 
+        public LukeWord(string word, ulong addedByUserID)
+            : this(word, addedByUserID, DateTime.UtcNow) { }
+
         /// <inheritdoc/>
         public override string ToString()
             => this.Word;
