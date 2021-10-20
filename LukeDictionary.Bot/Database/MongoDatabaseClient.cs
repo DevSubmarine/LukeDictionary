@@ -29,6 +29,9 @@ namespace DevSubmarine.LukeDictionary.Database.Services
             });
         }
 
+        public IMongoCollection<TDocument> GetCollection<TDocument>(string name, MongoCollectionSettings settings = null)
+            => this.GetDatabase(this._options.DatabaseName).GetCollection<TDocument>(name, settings);
+
         private static void FixMongoMapping()
         {
             // because ImmutableTypeClassMapConvention messes up when there's an object that has only readonly props
