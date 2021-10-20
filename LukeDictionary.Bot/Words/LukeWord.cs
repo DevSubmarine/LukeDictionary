@@ -16,11 +16,11 @@ namespace DevSubmarine.LukeDictionary
 
         // additional metadata, in case needed in future?
         [BsonElement("GuildID")]
-        public ulong GuildID { get; set; }
+        public ulong? GuildID { get; set; }
         [BsonElement("ChannelID")]
-        public ulong ChannelID { get; set; }
+        public ulong? ChannelID { get; set; }
         [BsonElement("MessageID")]
-        public ulong MessageID { get; set; }
+        public ulong? MessageID { get; set; }
 
         [BsonConstructor(nameof(Word), nameof(AddedByUserID), nameof(CreationTimeUTC))]
         public LukeWord(string word, ulong addedByUserID, DateTime creationTimeUTC)
