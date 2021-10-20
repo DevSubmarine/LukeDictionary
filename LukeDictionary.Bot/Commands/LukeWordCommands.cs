@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DevSubmarine.LukeDictionary.Discord;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -117,10 +118,30 @@ namespace DevSubmarine.LukeDictionary.Commands
             }
 
             [Command("lukedict")]
-            [Priority(-10)] // lower priority to allow additional commands like "likedict count" or whatever
-                            // TODO: DSharpPlus commands handling is garbage (unlike Wolfringo's), and doesn't allow whitespaces - add a "mode" switch to this command to support "add" etc
-            public async Task CmdAdd(CommandContext context, string word)
+            // DSharpPlus commands handling is garbage (unlike Wolfringo's), and doesn't allow whitespaces - add a "mode" switch to this command to support "add" etc
+            public Task CmdSwitch(CommandContext context, string mode, string word = null)
             {
+                if (mode == null)
+                    return this.CmdAdd(context, mode);
+
+                switch (mode.Trim().ToLowerInvariant())
+                {
+                    case "add":
+                        return this.CmdAdd(context, word);
+                    // if none matched, use mode as the word itself
+                    default:
+                        return this.CmdAdd(context, mode);
+                }
+            }
+
+            private async Task CmdAdd(CommandContext context, string word)
+            {
+                if (string.IsNullOrWhiteSpace(word))
+                {
+                    await context.RespondAsync($"{ResponseEmoji.Failure} And where's the word, huh?!").ConfigureAwait(false);
+                    return;
+                }
+
                 word = word.Trim().ToLowerInvariant();
                 DiscordUser user = context.Member ?? context.User;
 
