@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace DevSubmarine.LukeDictionary
 {
     /// <summary>Represents Luke's misspelled word + metadata.</summary>
-    public class LukeWord
+    public class LukeWord : IEquatable<LukeWord>, IEquatable<string>
     {
         [BsonId]
         public string Word { get; }
@@ -32,5 +33,39 @@ namespace DevSubmarine.LukeDictionary
             this.AddedByUserID = addedByUserID;
             this.CreationTimeUTC = creationTimeUTC;
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+            => this.Word;
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            if (obj is LukeWord wordObject)
+                return this.Equals(wordObject);
+            if (obj is string wordString)
+                return this.Equals(wordString);
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(LukeWord other)
+            => other != null && this.Word.Equals(other.Word, StringComparison.OrdinalIgnoreCase);
+
+        /// <inheritdoc/>
+        public bool Equals(string other)
+            => other != null && this.Word.Equals(other, StringComparison.OrdinalIgnoreCase);
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+            => this.Word.GetHashCode(StringComparison.OrdinalIgnoreCase);
+
+        /// <inheritdoc/>
+        public static bool operator ==(LukeWord left, LukeWord right)
+            => EqualityComparer<LukeWord>.Default.Equals(left, right);
+
+        /// <inheritdoc/>
+        public static bool operator !=(LukeWord left, LukeWord right)
+            => !(left == right);
     }
 }
