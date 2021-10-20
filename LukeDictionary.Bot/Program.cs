@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DevSubmarine.LukeDictionary.Database;
 using DevSubmarine.LukeDictionary.Discord;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,9 +40,11 @@ namespace DevSubmarine.LukeDictionary
                 {
                     // load config
                     services.Configure<DiscordOptions>(context.Configuration);
+                    services.Configure<MongoOptions>(context.Configuration.GetSection("Database"));
 
                     // add services
                     services.AddDiscord();
+                    services.AddMongoDB();
                 })
                 .Build();
             return host.RunAsync();
