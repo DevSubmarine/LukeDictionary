@@ -4,6 +4,17 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>DevSubmarine.LukeDictionary</RootNamespace>
+    <PackageId>DevSubmarine.LukeDictionary.Bot</PackageId>
+    <Authors>DevSubmarine,TehGM</Authors>
+    <Company>DevSubmarine</Company>
+    <Product>LukeDictionary Discord Bot</Product>
+    <Version>0.1.0</Version>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/DevSubmarine/LukeDictionary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DevSubmarine/LukeDictionary</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Copyright>Copyright (c) 2021 DevSubmarine &amp; TehGM</Copyright>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
