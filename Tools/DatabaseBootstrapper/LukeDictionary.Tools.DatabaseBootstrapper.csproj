@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>DevSubmarine.LukeDictionary.Tools.DatabaseBootstrapper</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.13.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\LukeDictionary.Bot\LukeDictionary.Bot.csproj" />
+    <ProjectReference Include="..\Shared\LukeDictionary.Tools.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
