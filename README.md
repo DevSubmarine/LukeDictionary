@@ -5,6 +5,11 @@
 
 This is a Discord bot that will allow people add Luke's misspellings to database, and then retrieve them.
 
+## Creating bot
+To create the bot, go to [Discord Developer Portal](https://discord.com/developers/applications/) and create a new application. Make sure to grab Token from `Bot` tab, as it'll be needed in steps [below](#running).
+
+To add the bot to the guild (server), go to `OAuth2` tab, and create a new link. Make sure to select both `bot` and `applications.commands` scopes.
+
 ## Running
 1. Download or clone.
 2. Run [Database Bootstrapper](Tools/DatabaseBootsrapper) tool to create MongoDB collections.
