@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using DSharpPlus;
@@ -55,8 +57,23 @@ namespace DevSubmarine.LukeDictionary.Discord.CommandsProcessing
                 EnableMentionPrefix = options.AcceptMentionPrefix,
                 StringPrefixes = new string[] { options.Prefix }
             });
-            commandsNext.RegisterCommands(Assembly.GetEntryAssembly());
+
+            IEnumerable<TypeInfo> commands = this.FindCommands(Assembly.GetEntryAssembly());
+            foreach (TypeInfo type in commands)
+                commandsNext.RegisterCommands(type);
+
             return Task.CompletedTask;
+        }
+
+        // loading commands in DSharpPlus is shit and doesn't support nested classes, so let's do it properly by ourselves
+        // sigh, can we get at least one decent C# library for Discord? I mean, besides https://github.com/TehGM/Discord.Interactions.AspNetCore ofc
+        private IEnumerable<TypeInfo> FindCommands(Assembly assembly)
+        {
+            IEnumerable<TypeInfo> types = assembly.DefinedTypes.Where(t => !t.IsAbstract && !t.ContainsGenericParameters
+                && !Attribute.IsDefined(t, typeof(CompilerGeneratedAttribute)) && typeof(BaseCommandModule).IsAssignableFrom(t));
+            if (!types.Any())
+                this._log.LogWarning("Cannot initialize Simple commands from assembly {AssemblyName} - no non-static non-abstract classes inheriting from {Class}", assembly.FullName, nameof(BaseCommandModule));
+            return types;
         }
 
         private Task HandleCommandAsync(DiscordClient sender, MessageCreateEventArgs e)
