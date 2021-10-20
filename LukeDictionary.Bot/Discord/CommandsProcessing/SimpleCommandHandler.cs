@@ -35,9 +35,14 @@ namespace DevSubmarine.LukeDictionary.Discord.CommandsProcessing
 
         private Task InitializeCommandsAsync()
         {
-            _log.LogDebug("Initializing Simple commands");
             DiscordOptions options = this._options.CurrentValue;
+            if (!options.EnableSimpleCommands)
+            {
+                this._log.LogDebug("Simple commands disabled in options");
+                return Task.CompletedTask;
+            }
 
+            this._log.LogDebug("Initializing Simple commands");
             CommandsNextExtension commandsNext = this._client.UseCommandsNext(new CommandsNextConfiguration()
             {
                 UseDefaultCommandHandler = false,
@@ -59,7 +64,7 @@ namespace DevSubmarine.LukeDictionary.Discord.CommandsProcessing
             // Determine if the message is a command based on the prefix and make sure no bots trigger commands
             DiscordOptions options = this._options.CurrentValue;
             // only execute if not a bot message
-            if (!options.AcceptBotMessages && e.Message.Author.IsBot)
+            if (options.IgnoreBotMessages && e.Message.Author.IsBot)
                 return Task.CompletedTask;
 
             // Don't process the command if it was a system message

@@ -35,14 +35,20 @@ namespace DevSubmarine.LukeDictionary.Discord.CommandsProcessing
 
         private Task InitializeCommandsAsync()
         {
-            _log.LogDebug("Initializing Slash commands");
+            DiscordOptions options = this._options.CurrentValue;
+            if (!options.EnableSlashCommands)
+            {
+                this._log.LogDebug("Slash commands disabled in options");
+                return Task.CompletedTask;
+            }
+
+            this._log.LogDebug("Initializing Slash commands");
             SlashCommandsExtension slashCommands = this._client.UseSlashCommands(new SlashCommandsConfiguration()
             {
                 Services = this._serviceProvider
             });
 
             IEnumerable<TypeInfo> commands = this.FindCommands(Assembly.GetEntryAssembly());
-            DiscordOptions options = this._options.CurrentValue;
             foreach (TypeInfo type in commands)
                 slashCommands.RegisterCommands(type, options.GuildID);
 
