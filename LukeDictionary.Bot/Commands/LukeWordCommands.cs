@@ -42,12 +42,13 @@ namespace DevSubmarine.LukeDictionary.Commands
             string addedByName = await this.GetUserNameAsync(word.AddedByUserID, guild, cancellationToken).ConfigureAwait(false);
 
             return new DiscordEmbedBuilder()
-                .AddField("The Word!", $"***{word}***", false)
+                .WithTitle(word.ToString())
                 .AddField("Word By", $"{lukeName} (obviously <:what:526104145728503808>)", true)
                 .AddField("Added By", addedByName, true)
                 .WithThumbnail(luke.AvatarUrl)
                 .WithTimestamp(word.CreationTimeUTC)
                 .WithFooter($"This amazing word was invented by {luke.Username}#{luke.Discriminator}", luke.AvatarUrl)
+                .WithUrl($"https://discord.com/channels/{word.GuildID}/{word.ChannelID}/{word.MessageID}")
                 .Build();
         }
 
