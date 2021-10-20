@@ -174,7 +174,8 @@ namespace DevSubmarine.LukeDictionary.Commands
                 }
             }
 
-            private async Task CmdAdd(CommandContext context, string word)
+            [Command("lukeadd")]
+            public async Task CmdAdd(CommandContext context, string word)
             {
                 if (string.IsNullOrWhiteSpace(word))
                 {
