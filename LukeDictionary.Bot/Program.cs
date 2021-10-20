@@ -41,6 +41,7 @@ namespace DevSubmarine.LukeDictionary
                     // load config
                     services.Configure<DiscordOptions>(context.Configuration);
                     services.Configure<MongoOptions>(context.Configuration.GetSection("Database"));
+                    services.Configure<DevSubmarineOptions>(context.Configuration);
 
                     // add services
                     services.AddDiscord();
