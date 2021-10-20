@@ -7,9 +7,10 @@ This is a Discord bot that will allow people add Luke's misspellings to database
 
 ## Running
 1. Download or clone.
-2. Add `appsecrets.json` file (with "Copy always" or "Copy if newer" for **Copy to Output Directory**).
-3. Populate with secrets. See [appsecrets.Example.json](appsecrets.Example.json) for example.
-4. Build and run.
+2. Run [Database Bootstrapper](Tools/DatabaseBootsrapper) tool to create MongoDB collections.
+3. Add `appsecrets.json` file (with "Copy always" or "Copy if newer" for **Copy to Output Directory**).
+4. Populate with secrets. See [appsecrets.Example.json](appsecrets.Example.json) for example.
+5. Build and run.
 
 ## License
 Copyright (c) 2021 DevSubmarine & TehGM
