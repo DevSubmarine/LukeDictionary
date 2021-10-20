@@ -1,5 +1,6 @@
 ﻿using System;
 using DevSubmarine.LukeDictionary.Discord;
+using DevSubmarine.LukeDictionary.Discord.CommandsProcessing;
 using DSharpPlus;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +28,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<IHostedDiscordClient, HostedDiscordClient>();
             services.AddTransient<IHostedService>(provider => provider.GetRequiredService<IHostedDiscordClient>());
             services.TryAddSingleton<DiscordClient>(provider => provider.GetRequiredService<IHostedDiscordClient>().Client);
+
+            services.AddHostedService<SimpleCommandHandler>();
+            services.AddHostedService<SlashCommandHandler>();
 
             return services;
         }
