@@ -27,7 +27,8 @@ namespace DevSubmarine.LukeDictionary
             if (string.IsNullOrWhiteSpace(word))
                 throw new ArgumentNullException(nameof(word));
 
-            this.Word = word;
+            // store as lowercase - case does not matter, while storing as lowercase reduces the need for complex indexing
+            this.Word = word.ToLowerInvariant();
             this.AddedByUserID = addedByUserID;
             this.CreationTimeUTC = creationTimeUTC;
         }
