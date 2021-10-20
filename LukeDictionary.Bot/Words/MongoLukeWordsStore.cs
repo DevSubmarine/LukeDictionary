@@ -6,6 +6,7 @@ using DevSubmarine.LukeDictionary.Database;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace DevSubmarine.LukeDictionary.Services
 {
@@ -44,5 +45,8 @@ namespace DevSubmarine.LukeDictionary.Services
             IAsyncCursor<LukeWord> words = await this._collection.Find(Builders<LukeWord>.Filter.Empty).ToCursorAsync(cancellationToken).ConfigureAwait(false);
             return words.ToEnumerable(cancellationToken);
         }
+
+        public Task<LukeWord> GetRandomWordAsync(CancellationToken cancellationToken = default)
+            => this._collection.AsQueryable().Sample(1).FirstOrDefaultAsync(cancellationToken);
     }
 }
