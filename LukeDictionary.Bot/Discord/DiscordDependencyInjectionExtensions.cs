@@ -1,6 +1,8 @@
 ﻿using System;
 using DevSubmarine.LukeDictionary.Discord;
+using DSharpPlus;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -21,6 +23,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.Configure(configure);
 
             services.TryAddSingleton<IValidateOptions<DiscordOptions>, DiscordOptionsValidator>();
+
+            services.TryAddSingleton<IHostedDiscordClient, HostedDiscordClient>();
+            services.AddTransient<IHostedService>(provider => provider.GetRequiredService<IHostedDiscordClient>());
+            services.TryAddSingleton<DiscordClient>(provider => provider.GetRequiredService<IHostedDiscordClient>().Client);
 
             return services;
         }
