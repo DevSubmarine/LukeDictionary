@@ -34,7 +34,7 @@ namespace DevSubmarine.LukeDictionary.Services
             if (string.IsNullOrWhiteSpace(word))
                 throw new ArgumentNullException(nameof(word));
 
-            string wordLowercase = word.ToLowerInvariant();
+            string wordLowercase = word.Trim().ToLowerInvariant();
 
             return this._collection.Find(db => db.Word == wordLowercase).FirstOrDefaultAsync(cancellationToken);
         }

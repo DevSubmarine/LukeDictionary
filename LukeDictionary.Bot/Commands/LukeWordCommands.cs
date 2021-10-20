@@ -67,13 +67,16 @@ namespace DevSubmarine.LukeDictionary.Commands
         public async Task<LukeWord> AddOrGetWordAsync(LukeWord word, CancellationToken cancellationToken = default)
         {
             // try get existing one first
-            LukeWord result = await this._store.GetWordAsync(word.ToString(), cancellationToken).ConfigureAwait(false);
+            LukeWord result = await this.GetWordAsync(word.ToString(), cancellationToken).ConfigureAwait(false);
             if (result != null)
                 return result;
 
             await this._store.AddWordAsync(word, cancellationToken).ConfigureAwait(false);
             return word;
         }
+
+        public Task<LukeWord> GetWordAsync(string word, CancellationToken cancellationToken = default)
+            => this._store.GetWordAsync(word, cancellationToken);
 
 
         // now, DSharpPlus decided to use base classes instead of interfaces for everything :face_vomiting: 
@@ -101,8 +104,23 @@ namespace DevSubmarine.LukeDictionary.Commands
 
                 result = await this._shared.AddOrGetWordAsync(result).ConfigureAwait(false);
                 await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                    .AddEmbed(await this._shared.BuildWordEmbedAsync(result, context.Guild)))
-                    .ConfigureAwait(false);
+                    .AddEmbed(await this._shared.BuildWordEmbedAsync(result, context.Guild))).ConfigureAwait(false);
+            }
+
+            [SlashCommand("find", "Finds existing word in Luke Dictionary")]
+            public async Task CmdFind(InteractionContext context, [Option("word", "Word to look for")] string word)
+            {
+                LukeWord result = await this._shared.GetWordAsync(word).ConfigureAwait(false);
+                if (result == null)
+                {
+                    await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .WithContent("<:SeriousThonk:526806403935895562> Nope, not found.")).ConfigureAwait(false);
+                }
+                else
+                {
+                    await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .AddEmbed(await this._shared.BuildWordEmbedAsync(result, context.Guild))).ConfigureAwait(false);
+                }
             }
         }
 
@@ -127,6 +145,8 @@ namespace DevSubmarine.LukeDictionary.Commands
                 {
                     case "add":
                         return this.CmdAdd(context, word);
+                    case "find":
+                        return this.CmdFind(context, word);
                     // if none matched, use mode as the word itself
                     default:
                         return this.CmdAdd(context, mode);
@@ -137,7 +157,7 @@ namespace DevSubmarine.LukeDictionary.Commands
             {
                 if (string.IsNullOrWhiteSpace(word))
                 {
-                    await context.RespondAsync($"{ResponseEmoji.Failure} And where's the word, huh?!").ConfigureAwait(false);
+                    await context.RespondAsync($"{ResponseEmoji.Failure} And what's the word, huh?!").ConfigureAwait(false);
                     return;
                 }
 
@@ -150,6 +170,21 @@ namespace DevSubmarine.LukeDictionary.Commands
 
                 result = await this._shared.AddOrGetWordAsync(result).ConfigureAwait(false);
                 await context.RespondAsync(await this._shared.BuildWordEmbedAsync(result, context.Guild)).ConfigureAwait(false);
+            }
+
+            private async Task CmdFind(CommandContext context, string word)
+            {
+                if (string.IsNullOrWhiteSpace(word))
+                {
+                    await context.RespondAsync($"{ResponseEmoji.Failure} And what's the word, huh?!").ConfigureAwait(false);
+                    return;
+                }
+
+                LukeWord result = await this._shared.GetWordAsync(word).ConfigureAwait(false);
+                if (result == null)
+                    await context.RespondAsync("<:SeriousThonk:526806403935895562> Nope, not found.").ConfigureAwait(false);
+                else
+                    await context.RespondAsync(await this._shared.BuildWordEmbedAsync(result, context.Guild)).ConfigureAwait(false);
             }
         }
     }
