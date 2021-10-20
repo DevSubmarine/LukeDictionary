@@ -92,7 +92,6 @@ namespace DevSubmarine.LukeDictionary.Commands
             [SlashCommand("add", "Adds a new word to Luke Dictionary")]
             public async Task CmdAdd(InteractionContext context, [Option("word", "Word to add")] string word)
             {
-                word = word.Trim().ToLowerInvariant();
                 DiscordUser user = context.Member ?? context.User;
 
                 LukeWord result = new LukeWord(word, user.Id);
@@ -142,7 +141,6 @@ namespace DevSubmarine.LukeDictionary.Commands
                     return;
                 }
 
-                word = word.Trim().ToLowerInvariant();
                 DiscordUser user = context.Member ?? context.User;
 
                 LukeWord result = new LukeWord(word, user.Id);
