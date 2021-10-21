@@ -82,6 +82,9 @@ namespace DevSubmarine.LukeDictionary.Commands
         public Task<LukeWord> GetRandomWordAsync(CancellationToken cancellationToken = default)
             => this._store.GetRandomWordAsync(cancellationToken);
 
+        public Task<long> GetWordsCountAsync(CancellationToken cancellationToken = default)
+            => this._store.GetWordsCountAsync(cancellationToken);
+
 
         // now, DSharpPlus decided to use base classes instead of interfaces for everything :face_vomiting: 
         // for this reason, we need to create separate "module" classes for simple and slash commands
@@ -142,6 +145,14 @@ namespace DevSubmarine.LukeDictionary.Commands
                         .AddEmbed(await this._shared.BuildWordEmbedAsync(result, context.Guild))).ConfigureAwait(false);
                 }
             }
+
+            [SlashCommand("count", "Checks the amount of Luke's words accumulated so far")]
+            public async Task CmdCount(InteractionContext context)
+            {
+                long count = await this._shared.GetWordsCountAsync().ConfigureAwait(false);
+                await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                    .WithContent($"I know of about {count} Luke words. <:eyes_blurry:529187668064469002>")).ConfigureAwait(false);
+            }
         }
 
         [ModuleLifespan(ModuleLifespan.Transient)]
@@ -169,6 +180,8 @@ namespace DevSubmarine.LukeDictionary.Commands
                         return this.CmdFind(context, word);
                     case "random":
                         return this.CmdRandom(context);
+                    case "count":
+                        return this.CmdCount(context);
                     // if none matched, use mode as the word itself
                     default:
                         return this.CmdAdd(context, mode);
@@ -217,6 +230,12 @@ namespace DevSubmarine.LukeDictionary.Commands
                     await context.RespondAsync("<:SeriousThonk:526806403935895562> Nope, not found.").ConfigureAwait(false);
                 else
                     await context.RespondAsync(await this._shared.BuildWordEmbedAsync(result, context.Guild)).ConfigureAwait(false);
+            }
+
+            private async Task CmdCount(CommandContext context)
+            {
+                long count = await this._shared.GetWordsCountAsync().ConfigureAwait(false);
+                await context.RespondAsync($"I know of about {count} Luke words. <:eyes_blurry:529187668064469002>").ConfigureAwait(false);
             }
         }
     }

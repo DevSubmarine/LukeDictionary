@@ -10,5 +10,6 @@ namespace DevSubmarine.LukeDictionary
         Task<LukeWord> GetWordAsync(string word, CancellationToken cancellationToken = default);
         Task<IEnumerable<LukeWord>> GetAllWordsAsync(CancellationToken cancellationToken = default);
         Task<LukeWord> GetRandomWordAsync(CancellationToken cancellationToken = default);
+        Task<long> GetWordsCountAsync(CancellationToken cancellationToken = default);
     }
 }

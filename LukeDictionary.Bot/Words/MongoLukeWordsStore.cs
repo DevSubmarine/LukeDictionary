@@ -48,5 +48,8 @@ namespace DevSubmarine.LukeDictionary.Services
 
         public Task<LukeWord> GetRandomWordAsync(CancellationToken cancellationToken = default)
             => this._collection.AsQueryable().Sample(1).FirstOrDefaultAsync(cancellationToken);
+
+        public Task<long> GetWordsCountAsync(CancellationToken cancellationToken = default)
+            => this._collection.CountDocumentsAsync(Builders<LukeWord>.Filter.Empty, null, cancellationToken);
     }
 }
