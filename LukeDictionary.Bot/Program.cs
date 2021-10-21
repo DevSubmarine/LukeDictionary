@@ -49,6 +49,7 @@ namespace DevSubmarine.LukeDictionary
                     services.AddDiscord();
                     services.AddMongoDB();
                     services.AddPasteMyst();
+                    services.AddMemoryCache();
                 })
                 .Build();
             return host.RunAsync();
