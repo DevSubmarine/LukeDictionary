@@ -14,6 +14,7 @@ To add the bot to the guild (server), go to `OAuth2` tab, and create a new link.
 Pre-requirements: 
 - [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0).
 - MongoDB Cluster.
+- The bot is added to target guild (server). See [Creating bot](#creating-bot) above.
 
 Run locally:
 1. Download or clone.
