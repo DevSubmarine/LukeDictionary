@@ -12,7 +12,7 @@ Requires permissions to create databases, collections, indexes etc, so use conne
 - This tool currently references entire LukeDictionary project to get access to the types. Until separate Core project is created (if it does at all), this tool will ignore settings files for configuration. Use cmd args instead.
 
 ## License
-Copyright (c) 2021 DevSubmarine & TehGM
+Copyright (c) 2021 [DevSubmarine](https://github.com/DevSubmarine) & [TehGM](https://github.com/TehGM)
 
 Based on tools for SnipLink by TehGM, and licensed under the same license.  
 Licensed under [GNU General Public License v3.0](LICENSE) (GNU GPL-3.0).

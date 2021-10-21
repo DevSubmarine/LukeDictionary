@@ -23,6 +23,6 @@ Pre-requirements:
 6. Build and run.
 
 ## License
-Copyright (c) 2021 DevSubmarine & TehGM
+Copyright (c) 2021 [DevSubmarine](https://github.com/DevSubmarine) & [TehGM](https://github.com/TehGM)
 
 Licensed under [Apache 2.0 License](LICENSE).
