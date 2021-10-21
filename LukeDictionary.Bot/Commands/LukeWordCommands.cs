@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using DevSubmarine.LukeDictionary.Discord;
+using DevSubmarine.LukeDictionary.PasteMyst;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -10,6 +14,7 @@ using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 
 namespace DevSubmarine.LukeDictionary.Commands
 {
@@ -19,14 +24,16 @@ namespace DevSubmarine.LukeDictionary.Commands
         private readonly ILukeWordsStore _store;
         private readonly ILogger _log;
         private readonly IOptionsMonitor<DevSubmarineOptions> _devsubOptions;
+        private readonly IPasteMystClient _pasteMyst;
 
         public LukeWordCommands(DiscordClient client, ILukeWordsStore store, ILogger<LukeWordCommands> log,
-            IOptionsMonitor<DevSubmarineOptions> devsubOptions)
+            IOptionsMonitor<DevSubmarineOptions> devsubOptions, IPasteMystClient pasteMyst)
         {
             this._client = client;
             this._store = store;
             this._log = log;
             this._devsubOptions = devsubOptions;
+            this._pasteMyst = pasteMyst;
         }
 
         public async Task<DiscordEmbed> BuildWordEmbedAsync(LukeWord word, DiscordGuild guild, CancellationToken cancellationToken = default)
@@ -81,6 +88,27 @@ namespace DevSubmarine.LukeDictionary.Commands
 
         public Task<long> GetWordsCountAsync(CancellationToken cancellationToken = default)
             => this._store.GetWordsCountAsync(cancellationToken);
+
+        public async Task<string> GetWordsListAsync(CancellationToken cancellationToken = default)
+        {
+            IEnumerable<LukeWord> words = await this._store.GetAllWordsAsync(cancellationToken).ConfigureAwait(false);
+            try
+            {
+                string title = $"Luke's Dictionary vol. {DateTime.UtcNow}";
+                string contentPlain = $"Words in Luke Dictionary: {words.Count()}\r\n\r\n{string.Join("\r\n", words)}";
+                string contentJson = new JArray(words.Select(w => JObject.FromObject(w))).ToString(Newtonsoft.Json.Formatting.Indented);
+
+                Paste paste = new Paste(title, new Pasty[]
+                {
+                    new Pasty(contentPlain, $"{title} (Plain Text)", PastyLanguages.PlainText),
+                    new Pasty(contentJson, $"{title} (JSON)", PastyLanguages.JSON)
+                });
+                paste = await this._pasteMyst.CreatePasteAsync(paste, cancellationToken).ConfigureAwait(false);
+                return $"https://paste.myst.rs/{paste.ID}";
+            }
+            catch (HttpRequestException) { throw; }
+            catch (Exception ex) when (ex.LogAsError(this._log, "Failed building words list")) { throw; }
+        }
 
 
         // now, DSharpPlus decided to use base classes instead of interfaces for everything :face_vomiting: 
@@ -151,9 +179,24 @@ namespace DevSubmarine.LukeDictionary.Commands
                     .WithContent($"I know of about {count} Luke words. {ResponseEmoji.EyesBlurry}")).ConfigureAwait(false);
             }
 
+            [SlashCommand("list", "Gets a full list of all Luke's words!")]
             public async Task CmdList(InteractionContext context)
             {
-
+                await context.CreateResponseAsync(InteractionResponseType.DeferredChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                    .WithContent($"Building Words List {ResponseEmoji.Parrot60fps}")).ConfigureAwait(false);
+                try
+                {
+                    string result = await this._shared.GetWordsListAsync().ConfigureAwait(false);
+                    await context.EditResponseAsync(new DiscordWebhookBuilder()
+                        .WithContent($"{ResponseEmoji.ParrotParty} {result} {ResponseEmoji.ParrotParty}"),
+                        null).ConfigureAwait(false);
+                }
+                catch
+                {
+                    await context.EditResponseAsync(new DiscordWebhookBuilder()
+                        .WithContent($"{ResponseEmoji.FeelsBeanMan} I couldn't save the list to PasteMyst for some damn reason."),
+                        null).ConfigureAwait(false);
+                }
             }
         }
 
@@ -184,6 +227,8 @@ namespace DevSubmarine.LukeDictionary.Commands
                         return this.CmdRandom(context);
                     case "count":
                         return this.CmdCount(context);
+                    case "list":
+                        return this.CmdList(context);
                     // if none matched, use mode as the word itself
                     default:
                         return this.CmdAdd(context, mode);
@@ -238,6 +283,20 @@ namespace DevSubmarine.LukeDictionary.Commands
             {
                 long count = await this._shared.GetWordsCountAsync().ConfigureAwait(false);
                 await context.RespondAsync($"I know of about {count} Luke words. {ResponseEmoji.EyesBlurry}").ConfigureAwait(false);
+            }
+
+            private async Task CmdList(CommandContext context)
+            {
+                DiscordMessage response = await context.RespondAsync($"Building Words List {ResponseEmoji.Parrot60fps}").ConfigureAwait(false);
+                try
+                {
+                    string result = await this._shared.GetWordsListAsync().ConfigureAwait(false);
+                    await response.ModifyAsync($"{ResponseEmoji.ParrotParty} {result} {ResponseEmoji.ParrotParty}").ConfigureAwait(false);
+                }
+                catch
+                {
+                    await response.ModifyAsync($"{ResponseEmoji.FeelsBeanMan} I couldn't save the list to PasteMyst for some damn reason.").ConfigureAwait(false);
+                }
             }
         }
     }

@@ -43,7 +43,7 @@ namespace DevSubmarine.LukeDictionary.Services
         public async Task<IEnumerable<LukeWord>> GetAllWordsAsync(CancellationToken cancellationToken = default)
         {
             IAsyncCursor<LukeWord> words = await this._collection.Find(Builders<LukeWord>.Filter.Empty).ToCursorAsync(cancellationToken).ConfigureAwait(false);
-            return words.ToEnumerable(cancellationToken);
+            return await words.ToListAsync(cancellationToken).ConfigureAwait(false);    // ToList cause ToEnumerable complains when iterated more than once
         }
 
         public Task<LukeWord> GetRandomWordAsync(CancellationToken cancellationToken = default)

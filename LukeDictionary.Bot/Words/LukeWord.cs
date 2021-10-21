@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using DevSubmarine.LukeDictionary.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace DevSubmarine.LukeDictionary
 {
@@ -8,18 +10,25 @@ namespace DevSubmarine.LukeDictionary
     public class LukeWord : IEquatable<LukeWord>, IEquatable<string>
     {
         [BsonId]
+        [JsonProperty("word")]
         public string Word { get; }
         [BsonElement("AddedBy")]
+        [JsonProperty("addedBy")]
         public ulong AddedByUserID { get; }
         [BsonElement("CreationTime")]
+        [JsonProperty("creationTime")]
+        [JsonConverter(typeof(UnixTimestampConverter))]
         public DateTime CreationTimeUTC { get; }
 
         // additional metadata, in case needed in future?
         [BsonElement("GuildID")]
+        [JsonIgnore]
         public ulong? GuildID { get; set; }
         [BsonElement("ChannelID")]
+        [JsonIgnore]
         public ulong? ChannelID { get; set; }
         [BsonElement("MessageID")]
+        [JsonIgnore]
         public ulong? MessageID { get; set; }
 
         [BsonConstructor(nameof(Word), nameof(AddedByUserID), nameof(CreationTimeUTC))]
