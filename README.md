@@ -16,7 +16,7 @@ Pre-requirements:
 - MongoDB Cluster.
 
 1. Download or clone.
-2. Run [Database Bootstrapper](Tools/DatabaseBootsrapper) tool to create MongoDB collections.
+2. Run [Database Bootstrapper](Tools/DatabaseBootstrapper) tool to create MongoDB collections.
 3. Add `appsecrets.json` file ("Content" for **Build Action**, and "Copy always" or "Copy if newer" for **Copy to Output Directory**).
 4. Populate with secrets. See [appsecrets.Example.json](LukeDictionary.Bot/appsecrets.Example.json) for example.
 5. Ensure IP Address of the host that will run the bot is whitelisted in your MongoDB cluster.
