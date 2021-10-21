@@ -24,7 +24,7 @@ Run locally:
 6. Build and run.
 
 Run on host:
-1. Follow steps 1 to 4 above.
+1. Follow steps 1 to 5 above.
 2. Publish [LukeDictionary.Bot](LukeDictionary.Bot) project.
 3. Move published files to host machine.
 4. Run `dotnet LukeDictionary.Bot.dll`, create a systemd service, or build and run Docker image using [Dockerfile](LukeDictionary.Bot/Dockerfile).
