@@ -15,12 +15,21 @@ Pre-requirements:
 - [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0).
 - MongoDB Cluster.
 
+Run locally:
 1. Download or clone.
 2. Run [Database Bootstrapper](Tools/DatabaseBootstrapper) tool to create MongoDB collections.
 3. Add `appsecrets.json` file ("Content" for **Build Action**, and "Copy always" or "Copy if newer" for **Copy to Output Directory**).
 4. Populate with secrets. See [appsecrets.Example.json](LukeDictionary.Bot/appsecrets.Example.json) for example.
 5. Ensure IP Address of the host that will run the bot is whitelisted in your MongoDB cluster.
 6. Build and run.
+
+Run on host:
+1. Follow steps 1 to 4 above.
+2. Publish [LukeDictionary.Bot](LukeDictionary.Bot) project.
+3. Move published files to host machine.
+4. Run `dotnet LukeDictionary.Bot.dll`, create a systemd service, or build and run Docker image using [Dockerfile](LukeDictionary.Bot/Dockerfile).
+
+> Note: Do ***NOT*** push this docker image to remote repo (like dockerhub) if you created `appsecrets.json` file. Just don't, unless you want yor secrets compromised.
 
 ## License
 Copyright (c) 2021 [DevSubmarine](https://github.com/DevSubmarine) & [TehGM](https://github.com/TehGM)
