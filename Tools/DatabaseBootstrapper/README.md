@@ -7,6 +7,7 @@ Requires permissions to create databases, collections, indexes etc, so use conne
 
 ## Disclaimers
 - Note that this tool assumes a MongoDB cluster is already up and running.
+- Ensure that your IP Address is whitelisted in your MongoDB cluster.
 - This tool might not get updated regularly. It's designed for internal use, primarily.
 - This tool currently references entire LukeDictionary project to get access to the types. Until separate Core project is created (if it does at all), this tool will ignore settings files for configuration. Use cmd args instead.
 
