@@ -11,10 +11,14 @@ To create the bot, go to [Discord Developer Portal](https://discord.com/develope
 To add the bot to the guild (server), go to `OAuth2` tab, and create a new link. Make sure to select both `bot` and `applications.commands` scopes.
 
 ## Running
+Pre-requirements: 
+- [.NET 5](https://dotnet.microsoft.com/download/dotnet/5.0).
+- MongoDB Cluster.
+
 1. Download or clone.
 2. Run [Database Bootstrapper](Tools/DatabaseBootsrapper) tool to create MongoDB collections.
-3. Add `appsecrets.json` file (with "Copy always" or "Copy if newer" for **Copy to Output Directory**).
-4. Populate with secrets. See [appsecrets.Example.json](appsecrets.Example.json) for example.
+3. Add `appsecrets.json` file ("Content" for **Build Action**, and "Copy always" or "Copy if newer" for **Copy to Output Directory**).
+4. Populate with secrets. See [appsecrets.Example.json](LukeDictionary.Bot/appsecrets.Example.json) for example.
 5. Ensure IP Address of the host that will run the bot is whitelisted in your MongoDB cluster.
 6. Build and run.
 
