@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DevSubmarine.LukeDictionary.Discord;
@@ -43,7 +40,7 @@ namespace DevSubmarine.LukeDictionary.Commands
 
             return new DiscordEmbedBuilder()
                 .WithTitle(word.ToString())
-                .AddField("Word By", $"{lukeName} (obviously <:what:526104145728503808>)", true)
+                .AddField("Word By", $"{lukeName} (obviously {ResponseEmoji.JerryWhat})", true)
                 .AddField("Added By", addedByName, true)
                 .WithThumbnail(luke.AvatarUrl)
                 .WithTimestamp(word.CreationTimeUTC)
@@ -121,7 +118,7 @@ namespace DevSubmarine.LukeDictionary.Commands
                 if (result == null)
                 {
                     await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent("<:SeriousThonk:526806403935895562> Nope, not found.")).ConfigureAwait(false);
+                        .WithContent($"{ResponseEmoji.SeriousThonk} Nope, not found.")).ConfigureAwait(false);
                 }
                 else
                 {
@@ -137,7 +134,7 @@ namespace DevSubmarine.LukeDictionary.Commands
                 if (result == null)
                 {
                     await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .WithContent("<:SeriousThonk:526806403935895562> Seems no word was added yet?")).ConfigureAwait(false);
+                        .WithContent($"{ResponseEmoji.SeriousThonk} Seems no word was added yet?")).ConfigureAwait(false);
                 }
                 else
                 {
@@ -151,7 +148,7 @@ namespace DevSubmarine.LukeDictionary.Commands
             {
                 long count = await this._shared.GetWordsCountAsync().ConfigureAwait(false);
                 await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                    .WithContent($"I know of about {count} Luke words. <:eyes_blurry:529187668064469002>")).ConfigureAwait(false);
+                    .WithContent($"I know of about {count} Luke words. {ResponseEmoji.EyesBlurry}")).ConfigureAwait(false);
             }
         }
 
@@ -218,7 +215,7 @@ namespace DevSubmarine.LukeDictionary.Commands
 
                 LukeWord result = await this._shared.GetWordAsync(word).ConfigureAwait(false);
                 if (result == null)
-                    await context.RespondAsync("<:SeriousThonk:526806403935895562> Nope, not found.").ConfigureAwait(false);
+                    await context.RespondAsync($"{ResponseEmoji.SeriousThonk} Nope, not found.").ConfigureAwait(false);
                 else
                     await context.RespondAsync(await this._shared.BuildWordEmbedAsync(result, context.Guild)).ConfigureAwait(false);
             }
@@ -227,7 +224,7 @@ namespace DevSubmarine.LukeDictionary.Commands
             {
                 LukeWord result = await this._shared.GetRandomWordAsync().ConfigureAwait(false);
                 if (result == null)
-                    await context.RespondAsync("<:SeriousThonk:526806403935895562> Nope, not found.").ConfigureAwait(false);
+                    await context.RespondAsync($"{ResponseEmoji.SeriousThonk} Nope, not found.").ConfigureAwait(false);
                 else
                     await context.RespondAsync(await this._shared.BuildWordEmbedAsync(result, context.Guild)).ConfigureAwait(false);
             }
@@ -235,7 +232,7 @@ namespace DevSubmarine.LukeDictionary.Commands
             private async Task CmdCount(CommandContext context)
             {
                 long count = await this._shared.GetWordsCountAsync().ConfigureAwait(false);
-                await context.RespondAsync($"I know of about {count} Luke words. <:eyes_blurry:529187668064469002>").ConfigureAwait(false);
+                await context.RespondAsync($"I know of about {count} Luke words. {ResponseEmoji.EyesBlurry}").ConfigureAwait(false);
             }
         }
     }
