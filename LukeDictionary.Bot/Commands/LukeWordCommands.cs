@@ -150,6 +150,11 @@ namespace DevSubmarine.LukeDictionary.Commands
                 await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                     .WithContent($"I know of about {count} Luke words. {ResponseEmoji.EyesBlurry}")).ConfigureAwait(false);
             }
+
+            public async Task CmdList(InteractionContext context)
+            {
+
+            }
         }
 
         [ModuleLifespan(ModuleLifespan.Transient)]

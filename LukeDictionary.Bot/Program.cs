@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DevSubmarine.LukeDictionary.Database;
 using DevSubmarine.LukeDictionary.Discord;
+using DevSubmarine.LukeDictionary.PasteMyst;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,10 +43,12 @@ namespace DevSubmarine.LukeDictionary
                     services.Configure<DiscordOptions>(context.Configuration);
                     services.Configure<MongoOptions>(context.Configuration.GetSection("Database"));
                     services.Configure<DevSubmarineOptions>(context.Configuration);
+                    services.Configure<PasteMystOptions>(context.Configuration.GetSection("PasteMyst"));
 
                     // add services
                     services.AddDiscord();
                     services.AddMongoDB();
+                    services.AddPasteMyst();
                 })
                 .Build();
             return host.RunAsync();
