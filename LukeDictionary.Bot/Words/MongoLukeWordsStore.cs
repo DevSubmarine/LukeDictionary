@@ -47,7 +47,8 @@ namespace DevSubmarine.LukeDictionary.Services
             {
                 this._log.LogDebug("Retrieving Luke's amazing word {word} from DB", word);
                 result = await this._collection.Find(db => db.Word == wordLowercase).FirstOrDefaultAsync(cancellationToken);
-                this._cache.Set(result.ToString(), result, this._cacheOptions);
+                if (result != null)
+                    this._cache.Set(result.ToString(), result, this._cacheOptions);
             }
             return result;
         }
