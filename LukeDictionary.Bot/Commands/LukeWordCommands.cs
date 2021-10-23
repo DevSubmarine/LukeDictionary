@@ -116,7 +116,7 @@ namespace DevSubmarine.LukeDictionary.Commands
         }
 
         public bool ValidateInput(LukeWord word)
-            => this.ValidateInput(word.ToString());
+            => this.ValidateInput(word?.ToString());
 
         public bool ValidateInput(string input)
         {
