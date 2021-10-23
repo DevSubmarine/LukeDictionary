@@ -31,8 +31,8 @@ namespace DevSubmarine.LukeDictionary
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     // load secrets files if present
-                    config.AddJsonFile("appsecrets.json", optional: true);
-                    config.AddJsonFile($"appsecrets.{context.HostingEnvironment.EnvironmentName}.json", optional: true);
+                    config.AddJsonFile("appsecrets.json", optional: true, reloadOnChange: true);
+                    config.AddJsonFile($"appsecrets.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
                 })
                 .UseSerilog((context, config) 
                     => config.ReadFrom.Configuration(context.Configuration, "Logging"), 
