@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using DevSubmarine.LukeDictionary.Discord;
@@ -25,6 +26,7 @@ namespace DevSubmarine.LukeDictionary.Commands
         private readonly ILogger _log;
         private readonly IOptionsMonitor<DevSubmarineOptions> _devsubOptions;
         private readonly IPasteMystClient _pasteMyst;
+        private readonly Regex _inputValidationRegex;
 
         public LukeWordCommands(DiscordClient client, ILukeWordsStore store, ILogger<LukeWordCommands> log,
             IOptionsMonitor<DevSubmarineOptions> devsubOptions, IPasteMystClient pasteMyst)
@@ -34,6 +36,9 @@ namespace DevSubmarine.LukeDictionary.Commands
             this._log = log;
             this._devsubOptions = devsubOptions;
             this._pasteMyst = pasteMyst;
+            this._inputValidationRegex = new Regex(@"^[A-Za-z0-9]{1,25}$", 
+                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled, 
+                TimeSpan.FromMilliseconds(500));
         }
 
         public async Task<DiscordEmbed> BuildWordEmbedAsync(LukeWord word, DiscordGuild guild, CancellationToken cancellationToken = default)
@@ -110,6 +115,16 @@ namespace DevSubmarine.LukeDictionary.Commands
             catch (Exception ex) when (ex.LogAsError(this._log, "Failed building words list")) { throw; }
         }
 
+        public bool ValidateInput(LukeWord word)
+            => this.ValidateInput(word.ToString());
+
+        public bool ValidateInput(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
+            return this._inputValidationRegex.IsMatch(input);
+        }
+
 
         // now, DSharpPlus decided to use base classes instead of interfaces for everything :face_vomiting: 
         // for this reason, we need to create separate "module" classes for simple and slash commands
@@ -133,6 +148,14 @@ namespace DevSubmarine.LukeDictionary.Commands
                 result.GuildID = context.Guild?.Id;
                 result.ChannelID = context.Channel?.Id;
                 result.MessageID = context.InteractionId;
+
+                if (!this._shared.ValidateInput(result))
+                {
+                    await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .WithContent($"{ResponseEmoji.Failure} Your input is invalid.")
+                        .AsEphemeral(true)).ConfigureAwait(false);
+                    return;
+                }
 
                 result = await this._shared.AddOrGetWordAsync(result).ConfigureAwait(false);
                 await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -250,6 +273,12 @@ namespace DevSubmarine.LukeDictionary.Commands
                 result.GuildID = context.Guild?.Id;
                 result.ChannelID = context.Channel?.Id;
                 result.MessageID = context.Message?.Id;
+
+                if (!this._shared.ValidateInput(result))
+                {
+                    await context.RespondAsync($"{ResponseEmoji.Failure} Your input is invalid.").ConfigureAwait(false);
+                    return;
+                }
 
                 result = await this._shared.AddOrGetWordAsync(result).ConfigureAwait(false);
                 await context.RespondAsync(await this._shared.BuildWordEmbedAsync(result, context.Guild)).ConfigureAwait(false);
