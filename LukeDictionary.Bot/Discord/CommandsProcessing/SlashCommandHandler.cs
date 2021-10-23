@@ -20,7 +20,6 @@ namespace DevSubmarine.LukeDictionary.Discord.CommandsProcessing
         private IServiceProvider _serviceProvider;
         private ILogger _log;
         private SemaphoreSlim _lock;
-        private CancellationToken _hostCancellationToken;
 
         public SlashCommandHandler(IServiceProvider serviceProvider, IHostedDiscordClient client, IOptionsMonitor<DiscordOptions> options, ILogger<SlashCommandHandler> log)
         {

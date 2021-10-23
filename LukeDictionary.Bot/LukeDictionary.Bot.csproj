@@ -8,13 +8,16 @@
     <Authors>DevSubmarine,TehGM</Authors>
     <Company>DevSubmarine</Company>
     <Product>LukeDictionary Discord Bot</Product>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/DevSubmarine/LukeDictionary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/DevSubmarine/LukeDictionary</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Copyright>Copyright (c) 2021 DevSubmarine &amp; TehGM</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>- Caching of not-found words fixed.
+- Input validation.
+- Hot-reloading of appsecrets files.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
