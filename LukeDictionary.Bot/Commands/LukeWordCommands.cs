@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DevSubmarine.LukeDictionary.Discord;
 using DevSubmarine.LukeDictionary.PasteMyst;
+using DevSubmarine.LukeDictionary.Words;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
@@ -25,16 +26,18 @@ namespace DevSubmarine.LukeDictionary.Commands
         private readonly ILukeWordsStore _store;
         private readonly ILogger _log;
         private readonly IOptionsMonitor<DevSubmarineOptions> _devsubOptions;
+        private readonly IOptionsMonitor<LukeWordsOptions> _wordsOptions;
         private readonly IPasteMystClient _pasteMyst;
         private readonly Regex _inputValidationRegex;
 
         public LukeWordCommands(DiscordClient client, ILukeWordsStore store, ILogger<LukeWordCommands> log,
-            IOptionsMonitor<DevSubmarineOptions> devsubOptions, IPasteMystClient pasteMyst)
+            IOptionsMonitor<DevSubmarineOptions> devsubOptions, IOptionsMonitor<LukeWordsOptions> wordsOptions, IPasteMystClient pasteMyst)
         {
             this._client = client;
             this._store = store;
             this._log = log;
             this._devsubOptions = devsubOptions;
+            this._wordsOptions = wordsOptions;
             this._pasteMyst = pasteMyst;
             this._inputValidationRegex = new Regex(@"^[A-Za-z0-9]{1,25}$", 
                 RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled, 
@@ -107,7 +110,7 @@ namespace DevSubmarine.LukeDictionary.Commands
                 {
                     new Pasty(contentPlain, $"{title} (Plain Text)", PastyLanguages.PlainText),
                     new Pasty(contentJson, $"{title} (JSON)", PastyLanguages.JSON)
-                });
+                }, this._wordsOptions.CurrentValue.ListExpiration);
                 paste = await this._pasteMyst.CreatePasteAsync(paste, cancellationToken).ConfigureAwait(false);
                 return $"https://paste.myst.rs/{paste.ID}";
             }
