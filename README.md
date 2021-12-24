@@ -30,6 +30,8 @@ Run on host:
 3. Move published files to host machine.
 4. Run `dotnet LukeDictionary.Bot.dll`, create a systemd service, or build and run Docker image using [Dockerfile](LukeDictionary.Bot/Dockerfile).
 
+There also is a [dockerscript.sh](LukeDictionary.Bot/dockerscript.sh) script to simplify running docker image with auto-restart. Of course it requires Docker installed on the host.
+
 > Note: Do ***NOT*** push this docker image to remote repo (like dockerhub) if you created `appsecrets.json` file. Just don't, unless you want yor secrets compromised.
 
 ## License

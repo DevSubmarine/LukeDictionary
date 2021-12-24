@@ -8,7 +8,7 @@
     <Authors>DevSubmarine,TehGM</Authors>
     <Company>DevSubmarine</Company>
     <Product>LukeDictionary Discord Bot</Product>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/DevSubmarine/LukeDictionary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/DevSubmarine/LukeDictionary</RepositoryUrl>
@@ -21,17 +21,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".dockerignore" />
     <None Remove="appsettings.Development.json" />
+    <None Remove="Dockerfile" />
+    <None Remove="dockerscript.sh" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.Development.json">
+    <Content Include=".dockerignore" Condition="Exists('.dockerignore')">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.Development.json" Condition="Exists('appsettings.Development.json')">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="appsecrets.json" Condition="Exists('appsecrets.json')">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dockerfile" Condition="Exists('Dockerfile')">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dockerscript.sh" Condition="Exists('dockerscript.sh')">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
