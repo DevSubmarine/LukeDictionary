@@ -1,3 +1,5 @@
+> This repository is now obsolete and not maintained, in favour of main [DevSubmarine Discord Bot](https://github.com/DevSubmarine/DiscordBot), which has this feature built in, and more.
+
 # Luke Dictionary Bot
 [![GitHub top language](https://img.shields.io/github/languages/top/DevSubmarine/LukeDictionary)](https://github.com/DevSubmarine/LukeDictionary) [![GitHub](https://img.shields.io/github/license/DevSubmarine/LukeDictionary)](LICENSE) [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/DevSubmarine/LukeDictionary/.NET%20Build)](https://github.com/DevSubmarine/LukeDictionary/actions) [![GitHub issues](https://img.shields.io/github/issues/DevSubmarine/LukeDictionary)](https://github.com/DevSubmarine/LukeDictionary/issues)
 
